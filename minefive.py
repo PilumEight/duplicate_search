@@ -2,7 +2,7 @@ import sys
 import os
 import hashlib
 
-#def equal(sizes):                               #возвращаем пары одинаковых документов (lambda) mnogo kopii
+#def equal(sizes):                          
 #    equal_list = []
 #    for i in range(0, len(sizes) - 1):
 #        for y in range(0, len(sizes) - 1):
@@ -15,13 +15,13 @@ def lsizes():                                    #сделать для любо
     mine_dir = os.getcwd()
     ur_dir = os.listdir()
     sizes = []
-    for i in ur_dir:                            #создаём лист из имён файлов находящийся в данной дирректории , и их размера (lambda)
+    for i in ur_dir:                            
         statinfo = os.stat(i)
         sizes.append((i, statinfo.st_size))
     return sizes
 
 
-def equal(sizes):                               #возвращаем пары одинаковых документов (lambda)
+def equal(sizes):                              
     equal_list = []
     for i in range(0, len(sizes)):
         for y in range(i + 1, len(sizes)):
