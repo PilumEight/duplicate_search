@@ -2,16 +2,44 @@ import sys
 import os
 import hashlib
 
+#paths = 'D:/WORKWORKWORK/test'                                показывает все файлы на пка
+#for path in paths:
+#    for dirpath, dirnames, filenames in os.walk(path):
+#        for filename in filenames:
+#            print(filename)
+#for i in os.walk
 
 
-def lsizes(dir_name):                                    #принимает на вход дирректорию првоеряет все файлы внутри
-    filenames = os.listdir(dir_name)
+
+#for i in os.walk(paths):
+#    new_path.append(i)
+#for address, dirs, files in new_path:
+#    for file in files:
+#             print(address+'/'+file)
+
+#def lsizes(dir_name):                                    #принимает на вход дирректорию првоеряет все файлы внутри
+#    filenames = os.listdir(dir_name)
+#    sizes = []
+#    for filename in filenames:                           #создаём лист из имён файлов находящийся в данной дирректории , и их размера (lambda)
+#        real_way = str(os.path.abspath(os.path.join(dir_name, filename)))
+#        if os.path.isfile(real_way):
+#            statinfo = os.stat(real_way)
+#            sizes.append((real_way, statinfo.st_size))
+#    return sizes
+
+def lsizes(dir_name):                                     # выводит список полных путей и размера
+    paths = dir_name
+    new_path = []
+    ways_list = []
     sizes = []
-    for filename in filenames:                           #создаём лист из имён файлов находящийся в данной дирректории , и их размера (lambda)
-        real_way = str(os.path.abspath(os.path.join(dir_name, filename)))
-        if os.path.isfile(real_way):
-            statinfo = os.stat(real_way)
-            sizes.append((real_way, statinfo.st_size))
+    for i in os.walk(paths):                                # создаём список с адресом самой папки, файлами которые в ней лежат, и вложенными в ней папками
+        new_path.append(i)
+    for address, dirs, files in new_path:                   # создаём список только адресов файлов
+        for file in files:
+                 ways_list.append(address+'/'+file)
+    for i in ways_list:                                     # создаём список с размером и адресом файлов (объед с пред)
+        statinfo = os.stat(i)
+        sizes.append((i, statinfo.st_size))
     return sizes
 
 
@@ -42,7 +70,7 @@ def check_for_duplicates(equal_list):                           #сравнив�
 
 
 def main():
-    dir_name = input("Pls enter name of directory: ")
+    dir_name = input("Pls enter name of directory with slash like '/': ")
     duplicates = check_for_duplicates(equal(lsizes(dir_name)))
     for i in duplicates:
         print(i)
