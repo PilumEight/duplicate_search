@@ -11,7 +11,7 @@ import hashlib
 #    return equal_list
 
 
-def lsizes(dir_name):                                    #сделать для любого пути принимая на вход дирректорию
+def lsizes(dir_name):                                    #принимает на вход дирректорию првоеряет все файлы внутри
     filenames = os.listdir(dir_name)
     sizes = []
     for filename in filenames:                           #создаём лист из имён файлов находящийся в данной дирректории , и их размера (lambda)
