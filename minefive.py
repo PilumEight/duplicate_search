@@ -11,13 +11,14 @@ import hashlib
 #    return equal_list
 
 
-def lsizes():                                    #сделать для любого пути принимая на вход дирректорию
-    mine_dir = os.getcwd()
-    ur_dir = os.listdir()
+def lsizes(dir_name):                                    #сделать для любого пути принимая на вход дирректорию
+    filenames = os.listdir(dir_name)
     sizes = []
-    for i in ur_dir:                            #создаём лист из имён файлов находящийся в данной дирректории , и их размера (lambda)
-        statinfo = os.stat(i)
-        sizes.append((i, statinfo.st_size))
+    for filename in filenames:                           #создаём лист из имён файлов находящийся в данной дирректории , и их размера (lambda)
+        real_way = str(os.path.abspath(os.path.join(dir_name, filename)))
+        if os.path.isfile(real_way):
+            statinfo = os.stat(real_way)
+            sizes.append((real_way, statinfo.st_size))
     return sizes
 
 
@@ -48,10 +49,12 @@ def check_for_duplicates(equal_list):                           #сравнив�
 
 
 def main():
-    duplicates = check_for_duplicates(equal(lsizes()))
+    dir_name = input("Pls enter name of directory: ")
+    duplicates = check_for_duplicates(equal(lsizes(dir_name)))
     for i in duplicates:
         print(i)
     print("This is duplicates: ", duplicates)
+    input("Pls enter any symbol for end")
     sys.exit("Have a good day")
 
 
