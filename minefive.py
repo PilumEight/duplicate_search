@@ -2,13 +2,6 @@ import sys
 import os
 import hashlib
 
-#def equal(sizes):                               #возвращаем пары одинаковых документов (lambda) mnogo kopii
-#    equal_list = []
-#    for i in range(0, len(sizes) - 1):
-#        for y in range(0, len(sizes) - 1):
-#            if sizes[i][1] == sizes[y][1]:
-#                equal_list.append((sizes[i], sizes[y]))
-#    return equal_list
 
 
 def lsizes(dir_name):                                    #принимает на вход дирректорию првоеряет все файлы внутри
