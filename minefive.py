@@ -1,16 +1,7 @@
 import sys
 import os
 import hashlib
-
-
-
-
-
-
-
-
-
-
+from builtins import print
 
 
 def md5(fname):                                  # возвращаем хэш файла
@@ -25,15 +16,20 @@ def md5(fname):                                  # возвращаем хэш �
 
 
 
+def hash_and_path2(old_dict2):          #THIRD ACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    for i in old_dict2:
+        for y in range(len(old_dict2[i])):
+              # абслоютный путь к которому мы будем присваивать хэш файла указанного в нём
+            old_dict2[i][y] = {str(md5(old_dict2[i][y])): str(old_dict2[i][y])}
+    return old_dict2
 
 
 
-
-def lsizes_final(dir_name):          #FIRST ACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                           # выводит список полных путей и размера
+def lsizes_final(dir_name):          #FIRST ACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     # выводит список полных путей и размера
     paths = dir_name
     new_path = []
     ways_list = []
-    sizes = []
+    sizes = []                      #список содержащий в себе кортежи из полного пути и размера файла
     for i in os.walk(paths):                                # создаём список с адресом самой папки, файлами которые в ней лежат, и вложенными в ней папками
         new_path.append(i)
     for address, dirs, files in new_path:                   # создаём список только адресов файлов
@@ -60,7 +56,7 @@ def hash_and_path2(old_dict2):          #THIRD ACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!
     for i in old_dict2:
         for y in range(len(old_dict2[i])):
               # абслоютный путь к которому мы будем присваивать хэш файла указанного в нём
-            old_dict2[i][y] = {str(md5(old_dict2[i][y])): str(old_dict2[i][y])}
+            old_dict2[i][y] = {str(md5(old_dict2[i][y])): [str(old_dict2[i][y])]}
     return old_dict2
 
 
@@ -76,25 +72,28 @@ def md5(fname):                                  # возвращаем хэш �
 
 
 
+
+
 def last_action(last_dict):                                                    #FOURTH ACTION
-  for key in last_dict:
+  for key in last_dict:                             #ищем в словарь файлы с одинаковыс хэшом и помещаем их под один ключ
     laik = last_dict[key]
     for i in range(len(laik)):                                                               #i каждый словарь листа
       for y in laik[i]:                                                                 #y ключ каждого словаря
         if laik[i][y] != '':
-          for j in range(i + 1 , len(laik)):                                     #j каждый словарь л
+          for j in range(i + 1, len(laik)):                                     #j каждый словарь л
             for s in laik[j]:
               if y == s:
-                laik[i][y] = laik[i][y] + ", " + laik[j][s]
+                laik[i][y].append(laik[j][s][0])
                 laik[j][s] = ''
                 s = ''
-  result = {}
-  for ds in last_dict:
-    result[ds] = []
-    for si in last_dict[ds]:
-      for sk in si:
-        if si[sk] != '':
-          result[ds].append(si)
+  result = {}                                                                       #создаём новый словарь и помещаем в него отсортированный
+  for key in last_dict:
+    laik = last_dict[key]
+    for i in range(len(laik)):
+        for y in laik[i]:
+            if len(laik[i][y]) > 1:
+                result.setdefault(y, laik[i][y])
+
   return result
 
 
@@ -103,13 +102,11 @@ def last_action(last_dict):                                                    #
 
 def main():
     dir_name = input("Pls enter name of directory with slash like '/': ")
-    #duplicates = check_for_duplicates(equal(lsizes_final(dir_name)))
-    da = last_action((hash_and_path2(sorted_dict(lsizes_final(dir_name)))))
-    for i in da:
-        print(da[i])
-    len(da)
 
-    #print("This is duplicates: ", da)
+    duplicates = last_action((hash_and_path2(sorted_dict(lsizes_final(dir_name)))))
+    for hash_key in duplicates:
+        print(hash_key, duplicates[hash_key])
+
     input("Pls enter any symbol for end")
     sys.exit("Have a good day")
 
