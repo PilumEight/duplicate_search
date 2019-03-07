@@ -2,26 +2,40 @@ import sys
 import os
 import hashlib
 from builtins import print
+import time
 
 
-def md5(fname):                                  # возвращаем хэш файла
-    hash_md5 = hashlib.md5()
-    with open(fname, "rb") as f:
-        for chunk in iter(lambda: f.read(4096), b""):
-            hash_md5.update(chunk)
+def benchmark(func):
+    """
+    Декоратор, выводящий время, которое заняло
+    выполнение декорируемой функции.
+    """
+    def wrapper(*args, **kwargs):
+        t = time.process_time()
+        res = func(*args, **kwargs)
+        print(func.__name__, time.process_time() - t)
+        return res
+    return wrapper
 
-    return hash_md5.hexdigest()
+def counter(func):
+    """
+    Декоратор, считающий и выводящий количество вызовов
+    декорируемой функции.
+    """
+    def wrapper(*args, **kwargs):
+        wrapper.count += 1
+        res = func(*args, **kwargs)
+        print("{0} была вызвана: {1}x".format(func.__name__, wrapper.count))
+        return res
+    wrapper.count = 0
+    return wrapper
 
 
 
 
 
-def hash_and_path2(old_dict2):          #THIRD ACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    for i in old_dict2:
-        for y in range(len(old_dict2[i])):
-              # абслоютный путь к которому мы будем присваивать хэш файла указанного в нём
-            old_dict2[i][y] = {str(md5(old_dict2[i][y])): str(old_dict2[i][y])}
-    return old_dict2
+
+
 
 
 
@@ -55,13 +69,13 @@ def sorted_dict(just): #SECOND ACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 def hash_and_path2(old_dict2):          #THIRD ACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     for i in old_dict2:
         for y in range(len(old_dict2[i])):
-              # абслоютный путь к которому мы будем присваивать хэш файла указанного в нём
+              # создание вложенных словарей где ключ - хэш,  значение - путь
             old_dict2[i][y] = {str(md5(old_dict2[i][y])): [str(old_dict2[i][y])]}
     return old_dict2
 
 
 
-
+@counter
 def md5(fname):                                  # возвращаем хэш файла
     hash_md5 = hashlib.md5()
     with open(fname, "rb") as f:
@@ -73,33 +87,33 @@ def md5(fname):                                  # возвращаем хэш �
 
 
 
-
+@benchmark
 def last_action(last_dict):                                                    #FOURTH ACTION
-  for key in last_dict:                             #ищем в словарь файлы с одинаковыс хэшом и помещаем их под один ключ
-    laik = last_dict[key]
-    for i in range(len(laik)):                                                               #i каждый словарь листа
-      for y in laik[i]:                                                                 #y ключ каждого словаря
-        if laik[i][y] != '':
-          for j in range(i + 1, len(laik)):                                     #j каждый словарь л
+  for key_size in last_dict:                             #ищем в словарь файлы с одинаковыс хэшом и помещаем их под один ключ
+    laik = last_dict[key_size]
+    for list_numb in range(len(laik)):                      #для каждого элемента
+      for y in laik[list_numb]:                             #
+        if laik[list_numb][y] != '':                        #
+          for j in range(list_numb + 1, len(laik)):         #
             for s in laik[j]:
               if y == s:
-                laik[i][y].append(laik[j][s][0])
+                laik[list_numb][y].append(laik[j][s][0])
                 laik[j][s] = ''
-                s = ''
-  result = {}                                                                       #создаём новый словарь и помещаем в него отсортированный
-  for key in last_dict:
-    laik = last_dict[key]
-    for i in range(len(laik)):
-        for y in laik[i]:
-            if len(laik[i][y]) > 1:
-                result.setdefault(y, laik[i][y])
+
+  result = {}                                        #создаём новый словарь и помещаем в него словари где хэш ключ, а значение - дубликаты
+  for key_size in last_dict:
+    laik = last_dict[key_size]
+    for list_numb in range(len(laik)):
+        for y in laik[list_numb]:
+            if len(laik[list_numb][y]) > 1:
+                result.setdefault(y, laik[list_numb][y])
 
   return result
 
 
 
 
-
+@benchmark
 def main():
     dir_name = input("Pls enter name of directory with slash like '/': ")
 
